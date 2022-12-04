@@ -1,4 +1,5 @@
 const {Schema,model} = require('mongoose')
+const tarea = require('./TASK')
 
 const UserSchema = new Schema({
 
@@ -15,6 +16,10 @@ const UserSchema = new Schema({
         min: 6,
         required: true
     },
+    dailyTasks: [{
+        type: Schema.Types.ObjectId,
+        ref: 'tarea'
+    }],
     isActive: {
         type: Schema.Types.Boolean,
         default: true

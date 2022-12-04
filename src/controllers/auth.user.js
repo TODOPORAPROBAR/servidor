@@ -1,4 +1,4 @@
-const User =require("../models/USER")
+const User =require("../models/user.model")
 
 const generarJWT=require("../helpers/generarJWT")
 const bcrypt=require('bcrypt')

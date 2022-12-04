@@ -53,19 +53,18 @@ CtrlTask.getTaskIdUser = async(req, res)=>{
 CtrlTask.postTask = async(req, res)=>{
     try {
         const idUser = req.user._id
-        const {title,description,state} = req.body
-        if (!idUser || !title || !description || !state){
+        const {title,description} = req.body
+        if (!title || !description){
             res.status(400).json({
                 msg:"Informacion incorrecta"
             })
         }
 
         const newTask = new Tareas({
-            idUser,
             title,
-            description,
-            state
+            description
         })
+        //Cambiar por insertMany()
         const tareaRegistrada=await newTask.save()
 
         res.status(200).json({

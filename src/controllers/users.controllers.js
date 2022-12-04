@@ -1,6 +1,5 @@
-const Usuario = require("../models/USER")
+const Usuario = require("../models/user.model")
 const bcrypt = require("bcrypt")
-
 
 const CtrlUser = {}
 
@@ -63,13 +62,14 @@ CtrlUser.getUserId = async(req, res)=>{
 //POST
 CtrlUser.postUser = async(req, res)=>{
     try {
-        const {username,email,password} = req.body
+        const {username,email,password,dailyTasks} = req.body
         const newPassword = bcrypt.hashSync(password, 10)
 
         const newUsuario = new Usuario({
             username,
             email,
-            password: newPassword
+            password: newPassword,
+            dailyTasks
         })
 
         const user = await newUsuario.save()
@@ -97,8 +97,8 @@ CtrlUser.putUser = async(req, res)=>{
     const idUser=req.user._id
 
   try {
-    const {username,email,password} = req.body;
-    await Usuario.findByIdAndUpdate(idUser,{username,email,password})
+    const {username,email,password,dailyTasks} = req.body;
+    await Usuario.findByIdAndUpdate(idUser,{username,email,password,dailyTasks});
     return res.status(200).json({
       msg: "Usuario actualizado correctamente"
     })
