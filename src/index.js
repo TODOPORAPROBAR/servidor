@@ -1,17 +1,17 @@
 //IMPORTAR LAS BIBLIOTECAS
 const express = require('express')
-const cors =require('cors')
+const cors = require('cors')
 const morgan = require('morgan')
 
 require('dotenv').config()
-const connectDB=require('./db/connection') //IMPORTAR LA FUNCIÓN DE LA CONCEXIÓN A LA BASE DE DATOS
+const connectDB = require('./db/connection') //IMPORTAR LA FUNCIÓN DE LA CONCEXIÓN A LA BASE DE DATOS
 
 //INICIALIZACIONES
 const app = express();
 connectDB()
 
 //CONFIGURACIONES
-const port=process.env.PORT ||4000;
+const port = process.env.PORT || 4000;
 
 // MIDDLEWARES
 app.use(cors())
@@ -22,6 +22,7 @@ app.use(express.json())
 app.use(require("./routes/users.routes"))
 app.use(require("./routes/tasks.routes"))
 app.use(require("./routes/auth.routes"))
+app.use(require("./routes/history.routes"))
 
 
 

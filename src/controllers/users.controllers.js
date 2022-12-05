@@ -4,34 +4,34 @@ const bcrypt = require("bcrypt")
 const CtrlUser = {}
 
 //GET
-CtrlUser.getUser = async(req, res)=>{
+CtrlUser.getUser = async (req, res) => {
     try {
         const user = await Usuario.find(({
             isActive: true
         }))
 
-        if(!user.length) {
-            res.status(400).json({
-                msg:"No se encontró ningún usuario"
+        if (!user.length) {
+            return res.status(400).json({
+                msg: "No se encontró ningún usuario"
             })
 
         }
-    
-        res.status(200).json({
+
+        return res.status(200).json({
             msg: "Usuarios encontrados",
             user
-    
+
         })
-    
+
     } catch (error) {
-        res.status(400).json({
-            msg:"Error"
+        return res.status(400).json({
+            msg: "Error"
         })
     }
 }
 
 //GET USER ID
-CtrlUser.getUserId = async(req, res)=>{
+CtrlUser.getUserId = async (req, res) => {
     try {
         const idUser = req.params.idUser
         const user = await Usuario.findOne({
@@ -60,16 +60,16 @@ CtrlUser.getUserId = async(req, res)=>{
 }
 
 //POST
-CtrlUser.postUser = async(req, res)=>{
+CtrlUser.postUser = async (req, res) => {
     try {
-        const {username,email,password,dailyTasks} = req.body
+        const { username, email, password, habits } = req.body
         const newPassword = bcrypt.hashSync(password, 10)
 
         const newUsuario = new Usuario({
             username,
             email,
             password: newPassword,
-            dailyTasks
+            habits
         })
 
         const user = await newUsuario.save()
@@ -83,7 +83,7 @@ CtrlUser.postUser = async(req, res)=>{
     } catch (error) {
         res.status(400).json({
             msg: "El usuario no fue creado",
-            error:error.message
+            error: error.message
         })
     }
 
@@ -92,16 +92,16 @@ CtrlUser.postUser = async(req, res)=>{
 }
 
 //PUT
-CtrlUser.putUser = async(req, res)=>{
+CtrlUser.putUser = async (req, res) => {
 
-    const idUser=req.user._id
+    const idUser = req.user._id
 
-  try {
-    const {username,email,password,dailyTasks} = req.body;
-    await Usuario.findByIdAndUpdate(idUser,{username,email,password,dailyTasks});
-    return res.status(200).json({
-      msg: "Usuario actualizado correctamente"
-    })
+    try {
+        const { username, email, password, habits } = req.body;
+        await Usuario.findByIdAndUpdate(idUser, { username, email, password, habits });
+        return res.status(200).json({
+            msg: "Usuario actualizado correctamente"
+        })
     } catch (error) {
         return res.status(400).json({
             msg: `Se ha encontrado un ${error}`
@@ -138,21 +138,21 @@ CtrlUser.deleteUser = async(req, res)=>{
 CtrlUser.deleteUser = async (req, res) => {
     try {
         const idUser = req.params._id;
-        const user = await Usuario.findOne({$and:[{_id: idUser},{isActive: true}]});
-        if(!user){
+        const user = await Usuario.findOne({ $and: [{ _id: idUser }, { isActive: true }] });
+        if (!user) {
             return res.status(404).json({
                 message: `El usuario ya no existe`
             })
         }
         // Busco y actualizo el estado de las tareas que es propietarios de las tareas
-        await TASK.updateMany({$and:[{isActive: true},{idUser}]}, {isActive: false})
+        await TASK.updateMany({ $and: [{ isActive: true }, { idUser }] }, { isActive: false })
         // Busco y actualizo el estado del usuario a eliminar
-        await user.updateOne({isActive: false})
+        await user.updateOne({ isActive: false })
         return res.status(201).json({
             message: `Usuario eliminado correctamente.`,
         })
     } catch (error) {
-        return res.status(500).json({message:`Error interno del servidor: ${error.message}`})
+        return res.status(500).json({ message: `Error interno del servidor: ${error.message}` })
     }
 }
 

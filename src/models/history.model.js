@@ -1,23 +1,27 @@
-const {Schema,model} = require('mongoose')
+const { Schema, model } = require('mongoose')
 
 const HistorySchema = new Schema({
 
   user: {
-    type: Schema.types.ObjetId,
+    type: Schema.Types.ObjectId,
     ref: "usuario"
   },
-  fecha: {
-    type: Schema.types.Date,
+  date: {
+    type: Schema.Types.Date,
   },
-  habitos: [{
-    name: Schema.types.String,
+  habits: [{
+    title: Schema.Types.String,
+    description: Schema.Types.String,
     tasks: [
       {
-      description: Schema.types.String,
-      checked: Schema.types.Boolean
+        description: Schema.Types.String,
+        checked: {
+          type: Schema.Types.Boolean,
+          default: false
+        }
       }
-  ]
-}]
+    ]
+  }]
 }, {
   versionKey: false,
   timestamps: true
