@@ -26,6 +26,10 @@ const UserSchema = new Schema({
         default: false
       }
     }],
+    isTemplate: {
+      type: Schema.Types.Boolean,
+      default: false
+    }
   }],
   isActive: {
     type: Schema.Types.Boolean,

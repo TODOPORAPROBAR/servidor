@@ -136,7 +136,7 @@ await tareas.updateOne({isActive:false})
 
 res.status(200).json({
     msg:"Tarea eliminada con éxito"})
- 
+
 } catch (error) {
     res.status(400).json({
         msg:"Error al eliminar la tarea"
