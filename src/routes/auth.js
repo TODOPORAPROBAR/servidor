@@ -3,6 +3,8 @@ const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 
+
+
 router.post("/", async (req, res) => {
 	try {
 		const { error } = validate(req.body);
@@ -12,20 +14,21 @@ router.post("/", async (req, res) => {
 		const user = await User.findOne({ email: req.body.email });
 		if (!user)
 			return res.status(401).send({ message: "Email o contraseña incorrectos" });
+			
+			const validPassword = await bcrypt.compare(
+				req.body.password,
+				user.password
+				);
+				if (!validPassword)
+				return res.status(401).send({ message: "Email o contraseña incorrectos" });
 
-		const validPassword = await bcrypt.compare(
-			req.body.password,
-			user.password
-		);
-		if (!validPassword)
-			return res.status(401).send({ message: "Email o contraseña incorrectos" });
+				
+				res.status(200).send({ message: "logged in successfully" });
+				
 
-		
-		
-	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
-	}
-	res.status(200).send({ message: "Usuario logueado" });
+		} catch (error) {
+			res.status(500).send({ message: "Internal Server Error" });
+		}
 });
 
 const validate = (data) => {
