@@ -28,12 +28,56 @@ CtrlUser.getUser = async (req, res) => {
 };
 
 CtrlUser.getUserHabits = async (req, res) => {
-  const { habits } = req.user
+  const { habits } = req.user;
   return res.status(200).json({
-    message: 'Habitos del usuario obtenidos correctamente',
-    habits
-  })
+    message: "Habitos del usuario obtenidos correctamente",
+    habits,
+  });
 };
+
+// UPDATE HABITS USER
+CtrlUser.updateHabitsUser = async (req, res) => {
+  try {
+    const { habit } = req.body;
+    const { _id } = req.user;
+    const usuario = await Usuario.findById(_id);
+    usuario.habits = [...usuario.habits, { ...habit, isTemplate: true }];
+    await usuario.save();
+    return res.status(200).json({
+      message: "Habitos del usuario actualizados correctamente",
+      habits: usuario.habits,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Error en el servidor",
+    });
+  }
+};
+
+
+// DELETE HABITS USER
+CtrlUser.deleteHabitUser = async (req, res) => {
+  try {
+    const { idHabit } = req.body;
+    const { _id } = req.user;
+    const usuario = await Usuario.findById(_id);
+    const habits = JSON.parse(JSON.stringify(usuario.habits))
+    const newHabits = habits.filter(habit => habit._id !== idHabit)
+    usuario.habits = newHabits;
+    await usuario.save();
+    return res.status(200).json({
+      message: "Habitos del usuario actualizados correctamente",
+      habits: usuario.habits,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "Error en el servidor",
+    });
+  }
+};
+
 
 //GET USER ID
 CtrlUser.getUserId = async (req, res) => {

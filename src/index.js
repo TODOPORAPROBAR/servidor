@@ -23,6 +23,7 @@ app.use(require("./routes/users.routes"))
 app.use(require("./routes/tasks.routes"))
 app.use(require("./routes/auth.routes"))
 app.use(require("./routes/history.routes"))
+app.use(require("./routes/templates.routes"))
 
 
 
