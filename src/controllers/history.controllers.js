@@ -73,4 +73,17 @@ controller.updateDailyHistory = async (req, res) => {
   }
 };
 
+controller.deleteDailyHistory = async (req,res) => {
+  try {
+    const { full } = getFormatDate();
+    const { user } = req;
+    await History.findOneAndDelete({ date: full, user: user._id });
+    res.status(200).json({
+      message: `daily del dia ${full} eliminado de ${user.username}`
+    })
+  } catch (error) {
+    return res.status(500).json({message: 'Error al eliminar el historial'})
+  }
+}
+
 module.exports = controller;
